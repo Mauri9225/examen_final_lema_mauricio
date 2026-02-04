@@ -1,13 +1,40 @@
-const API_URL = 'http://localhost:5000/api/tasks';
+const API_URL = 'http://localhost:4000/api/tasks';
 
-export const getTasks = () => fetch(API_URL).then(r => r.json());
+export const getTasks = async () => {
+  const res = await fetch(API_URL);
+  return res.json();
+};
 
-export const createTask = (data) =>
-  fetch(API_URL, {
+export const createTask = async (task) => {
+  const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(async r => {
-    if (!r.ok) throw await r.json();
-    return r.json();
+    body: JSON.stringify(task)
   });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw err;
+  }
+
+  return res.json();
+};
+
+export const updateTask = async (id, task) => {
+  const res = await fetch(`${API_URL}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(task)
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw err;
+  }
+
+  return res.json();
+};
+
+export const deleteTask = async (id) => {
+  await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+};
