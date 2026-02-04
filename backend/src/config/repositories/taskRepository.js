@@ -1,4 +1,4 @@
-const Task = require('../models/task');
+const Task = require("../models/task");
 
 class TaskRepository {
   findAll() {
@@ -13,7 +13,7 @@ class TaskRepository {
     return Task.create(data);
   }
 
-  async update(task, data) {
+  update(task, data) {
     return task.update(data);
   }
 

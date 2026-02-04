@@ -1,41 +1,45 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const taskService = require('../service/taskService');
+const taskService = require("../services/taskService");
 
-router.get('/', async (req, res) => {
-  res.json(await taskService.getAll());
+router.get("/", async (req, res) => {
+  const tasks = await taskService.getAll();
+  res.json(tasks);
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    res.json(await taskService.getById(req.params.id));
-  } catch (e) {
-    res.status(e.status).json({ message: e.message });
+    const task = await taskService.getById(req.params.id);
+    res.json(task);
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    res.status(201).json(await taskService.create(req.body));
-  } catch (e) {
-    res.status(e.status).json({ message: e.message });
+    const task = await taskService.create(req.body);
+    res.status(201).json(task);
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    res.json(await taskService.update(req.params.id, req.body));
-  } catch (e) {
-    res.status(e.status).json({ message: e.message });
+    const task = await taskService.update(req.params.id, req.body);
+    res.json(task);
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await taskService.delete(req.params.id);
-    res.sendStatus(204);
-  } catch (e) {
-    res.status(e.status).json({ message: e.message });
+    res.json({ message: "Task deleted" });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
   }
 });
 
